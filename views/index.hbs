@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panaderia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  </head>
+<body>
+    <header>
+    {{!-- MENU --}}
+    <nav class="navbar bg-dark navbar-dark" >
+       <div class="container-fluid">
+       <a class="navbar-brand" href="#">
+                    <img src="https://via.placeholder.com/50" alt="Logo" class="d-inline-block align-text-top">
+                </a>
+                <!-- texto -->
+                <div class="text-center bg-transparent text-bg-dark">
+                    <ul>
+                      <li class="list-group-item">Panaderia y Pasteleria</li>
+                      <li class="list-group-item">El Gran Pan</li>
+                    </ul>
+                  </div>
+       
+        <ul class="nav justify-content-end" >
+            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+        </ul>
+    </div>    
+    </nav>
+    </header>
+    {{!-- CUERPO --}}
+    <!-- CARRUSEL -->
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                aria-label="Slide 3"></button>
+        </div>
+        <!-- imagenes -->
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="pan1000x200_1.jpg" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="pan1000x200_2.jpg" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="pan1000x200_3.jpg" class="d-block w-100" alt="...">
+            </div>
+        </div>
+        <!-- controles -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <!-- FIN DEL CARROUSEL -->
+    
+    <!--div class="container mt-4">
+        <div class="mt-4 p-5 bg-primary text-white rounded">
+            <h1>Panaderia y Pasteleria La Gran Via</h1>
+            <h2>Espacialistas en Repostería y Dellicateses</h2>
+        </div>
+    </div-->
+  <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"
+        integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk"
+        crossorigin="anonymous"></script>
+		<script src="ejercicio9.js"></script>   
+</body>
+</html>

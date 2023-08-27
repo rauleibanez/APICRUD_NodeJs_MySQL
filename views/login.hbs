@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio Sesion</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  </head>
+</head>
+<body>
+    {{!-- MENU --}}
+    <nav class="navbar bg-dark navbar-dark" >
+       <div class="container-fluid">
+       <a class="navbar-brand" href="#">
+                    <img src="https://via.placeholder.com/50" alt="Logo" class="d-inline-block align-text-top">
+                </a>
+                <!-- texto -->
+                <div class="text-center bg-transparent text-bg-dark">
+                    <ul>
+                      <li class="list-group-item">Panaderia y Pasteleria</li>
+                      <li class="list-group-item">El Gran Pan</li>
+                    </ul>
+                  </div>
+       
+        <ul class="nav justify-content-end" >
+            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+            <!-- li class="nav-item"><a class="nav-link" href="/login">Login</a></li-->
+            <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+        </ul>
+    </div>    
+    </nav>
+ 
+    {{!-- Body --}}
+    <div class="row justify-content-center align-items-center">
+      <div class="container mt-4 col-auto">
+        <div class="card" style="width: 18rem;">            
+          <div class="card-header">Inicio de Sesión</div>    
+          <div class="card-body">
+                <form action="/auth/login" method="POST">
+                    <div class="mb-3">
+                        <label for="name-lgn" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" id="name-lgn" name="name" required>                        
+                    </div>                    
+                    <div class="mb-3">
+                        <label for="password-lgn" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password-lgn" name="password" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+          </div>
+        </div>
+          {{#if message }}
+            <h4 class="alert alert-danger mt-4">{{message}}</h4>
+          {{/if}}
+      </div>
+    </div>  
+</body>
+</html>
