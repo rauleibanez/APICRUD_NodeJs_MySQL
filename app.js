@@ -58,32 +58,33 @@ db.connect((error) => {
     }
 })
 /*--------------------------------------------------
- *  RUTAS DE LAS APIS
+ *             RUTAS DE LA APLICACION
  *--------------------------------------------------
  */
-/*-------[API DE RENDERIZACION DEL INDEX]-----------*/
+/*-------[RUTA DE RENDERIZACION DEL INDEX]-----------*/
 app.get("/", (req, res) => {
     res.render("index")
 })
-/*--------[API DE VALIDACION DE SESION ]------------*/
-/*---------------[API DE CLIENTES]------------------*/
-app.get("/clientes", (req, res) => {
+/*--------[RUTA DE VALIDACION DE SESION ]------------*/
+/*---------------[RUTA DE CLIENTES]------------------*/
+app.get("/clientes", (req, res, next) => {
     if (req.session.loggedin) {
-		// Usuario Loggeado
-		//res.send('Bienvenido, ' + req.session.username + '!');
-        //res.render("clindex");
-        return res.render('clindex',{
-            message: 'Bienvenido, '+ req.session.username + '!'
+		// Usuario Loggeado Hace el query y
+		//despliega datos en la pagina de administracion de clientes
+        db.query('SELECT * FROM clientes ORDER BY id_cliente DESC' ,  function(error, rows){
+            if(error){
+                console.log(error)
+            }
+            return res.render('clindex',{ message: 'Bienvenido, '+ req.session.username + '!', clientes: rows })    
         })
+        
 	} else {
 		// Usuario No Loggeado
-		//res.send('Por Favor Inicie Sesion para visitar esta pagina!');
-        return res.render('error',{
-            message: 'Por Favor Inicie Sesion para visitar esta pagina!'
-        })
+		//Se devuelve el mensaje mostrado por la pagina de error
+        return res.render('error',{message: 'Por Favor Inicie Sesion para visitar esta pagina!' })
 	}    
 })
-/*-----------------[API DE PEDIDOS]-----------------*/
+/*-----------------[RUTA DE PEDIDOS]-----------------*/
 app.get("/pedidos", (req, res) => {
     if (req.session.loggedin) {
 		// Usuario Loggeado
@@ -100,20 +101,20 @@ app.get("/pedidos", (req, res) => {
         })
 	}    
 })
-/*--------[API DE RENDERIZACION DEL REGISTER]-------*/
+/*--------[RUTA DE RENDERIZACION DEL REGISTER]-------*/
 app.get("/register", (req, res) => {
     res.render("register")
 })
-/*-----------[API DE RENDERIZACION DEL LOGIN]--------*/
+/*-----------[RUTA DE RENDERIZACION DEL LOGIN]--------*/
 app.get("/login", (req, res) => {
     res.render("login")
 })
-/*------------------[API DEL LOGOUT]-----------------*/
+/*------------------[RUTA DEL LOGOUT]-----------------*/
 app.get("/logout", (req, res) => {
     if (req.session.loggedin) {
         req.session.destroy(err => {
             if (err) {
-              res.status(400).send('Unable to log out')
+              res.status(400).send('Unable to log out')              
             } else {
               //res.send('Logout successful')
               res.redirect('/');
@@ -122,7 +123,7 @@ app.get("/logout", (req, res) => {
     }
 })
 /*====================================================
- *  API DE VALIDACION DE USUARIOS Y SESION DEL LOGIN
+ *  RUTA DE VALIDACION DE USUARIOS Y SESION DEL LOGIN
  *====================================================
  */
 app.post("/auth/login", (req, res)=>{
@@ -151,8 +152,12 @@ app.post("/auth/login", (req, res)=>{
     })
 
 })
+/*--------[RUTA DE RENDERIZACION FORMULARIO NUEVO CLIENTE]-------*/
+app.get("/newcli", (req, res) => {
+    res.render("newcli")
+})
 /*====================================================
- * API DE REGISTRO DE USUARIOS
+ * RUTA DE REGISTRO DE USUARIOS
  *==================================================== 
  */
 app.post("/auth/register", (req, res) => {    
@@ -188,6 +193,86 @@ app.post("/auth/register", (req, res) => {
         })        
     })
 })
+/*====================================================
+ * RUTA DE REGISTRO DE CLIENTES
+ *==================================================== 
+ */
+ app.post("/cliente/new", (req, res) => {
+    if (req.session.loggedin) {
+        const { cliente_nombre, cliente_apellido, cliente_direccion, cliente_correo, cliente_telefono} = req.body
+        db.query('SELECT correo FROM clientes WHERE correo = ?', [cliente_correo], async (error, result) => {
+            if(error){
+                console.log(error)
+            }
+            if( result.length > 0 ) {
+                return res.render('newcli', { message: 'Este e-mail ya fué Registrado' })
+            } else {                    
+                db.query('INSERT INTO clientes SET?', {nombre: cliente_nombre, apellido:cliente_apellido, direccion:cliente_direccion, correo:cliente_correo, telefono:cliente_telefono}, (err, result) => {
+                    if(error) {
+                        console.log(error)
+                    } else {
+                        return res.render('newcli', {message: 'Cliente Registrado!'})
+                    }
+                })        
+            }
+        })                         
+    } else {
+        return res.render('error',{
+            message: 'Por Favor Inicie Sesion para visitar esta pagina!'
+        })
+    }  
+ })
+/*====================================================
+ * RUTA DE SELECCION DE CLIENTES PARA EDICION
+ *==================================================== 
+ */
+ app.get('/edicli/:id', function(req, res, next) {
+    let id = req.params.id;
+    db.query(`SELECT * FROM clientes WHERE id_cliente =${id}`, function(err, rows, fields) {
+        if(err) throw err
+        // Usuario No encontrado
+        if (rows.length <= 0) {
+            //req.flash('error', 'User not found with id = ' + id)
+            res.redirect('/cliente')
+        }
+        // Usuario Encontrado
+        else {
+            // Muestra los datos en la pagina            
+            res.render('edicli', {clientes:rows[0]})
+        }
+    })
+})
+/*-----------------------------------------------
+ *  ACTUALIZACION DE CLIENTES SELECCIONADOS
+ *-----------------------------------------------
+ */
+ app.post("/clientes/actualiza/:id", function(req, res, next) {
+    var id = req.params.id;
+    const { cliente_nombre, cliente_apellido, cliente_direccion, cliente_correo, cliente_telefono} = req.body
+
+    var sql = `UPDATE clientes SET nombre="${cliente_nombre}", apellido="${cliente_apellido}", direccion="${cliente_direccion}", correo="${cliente_correo}", telefono="${cliente_telefono}" WHERE id_cliente=${id}`;
+  
+    db.query(sql, function(err, result) {
+      if (err) throw err;
+      console.log('Registro Actualizado!');
+      res.redirect('/clientes');
+    });
+  });
+/*-----------------------------------------------
+ *  ELIMINACION DE CLIENTES SELECCIONADOS
+ *-----------------------------------------------
+ */
+ app.get('/clientes/elimina/:id', function(req, res){
+    var id = req.params.id;
+    console.log(id);
+    var sql = `DELETE FROM clientes WHERE id_cliente=${id}`;
+  
+    db.query(sql, function(err, result) {
+      if (err) throw err;
+      console.log('Registro Eliminado');
+      res.redirect('/clientes');
+    });
+  });
 /*------------------------------------------------------
  *   CONFIGURACION DEL PUERTO DE ESCUCHA
  *------------------------------------------------------

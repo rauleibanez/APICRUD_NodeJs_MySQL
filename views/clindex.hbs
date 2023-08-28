@@ -35,9 +35,36 @@
         {{#if message }} 
         <div class="alert alert-success" role="alert">{{message}}</div>
         {{/if}}
-        
-        
     </div>    
-
+    <div class="container">
+    <h1>Administración de Clientes</h1>
+    <a href="/newcli" class="btn btn-success">Nuevo Cliente</a>
+    <br /><br />
+    <table class="table">
+    <tr>
+      <th>#ID</th>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>Correo</th>
+      <th>Direccion</th>
+      <th>Teléfono</th>
+      <th>Action</th>
+    </tr>
+    {{#each clientes}}
+      <tr>
+        <td>{{this.id_cliente}}</td>
+        <td>{{this.nombre}}</td>
+        <td>{{this.apellido}}</td>
+        <td>{{this.correo}}</td>
+        <td>{{this.direccion}}</td>
+        <td>{{this.telefono}}</td>
+        <td>
+            <a href="/edicli/{{this.id_cliente}}" class="btn btn-info btn-sm">Editar</a>
+            <a href="/clientes/elimina/{{this.id_cliente}}" class="btn btn-danger btn-sm">Borrar</a>
+        </td>
+      </tr>
+    {{/each}}
+    </table>
+    </div>
 </body>
 </html>
